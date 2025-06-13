@@ -1,7 +1,7 @@
 # Define the resource group
 resource "azurerm_resource_group" "rg" {
   name     = "${var.labelPrefix}-A05-RG"
-  location = var.region
+  location = "canadacentral"
 }
 
 # Define a public IP address
@@ -20,7 +20,6 @@ resource "azurerm_virtual_network" "vnet" {
   resource_group_name = azurerm_resource_group.rg.name
 }
 
-
 # Define the subnet
 resource "azurerm_subnet" "webserver" {
   name                 = "${var.labelPrefix}A05Subnet"
@@ -31,7 +30,7 @@ resource "azurerm_subnet" "webserver" {
 
 # Define network security group and rules
 resource "azurerm_network_security_group" "webserver" {
-  name                = "${var.labelPrefix}A05SG" # mckennrA05SG
+  name                = "${var.labelPrefix}A05SG"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
 
@@ -88,8 +87,7 @@ data "cloudinit_config" "init" {
   part {
     filename     = "init.sh"
     content_type = "text/x-shellscript"
-
-    content = file("${path.module}/init.sh")
+    content      = file("${path.module}/init.sh")
   }
 }
 
@@ -120,8 +118,7 @@ resource "azurerm_linux_virtual_machine" "webserver" {
 
   admin_ssh_key {
     username   = var.admin_username
-    ppublic_key = file("/Users/kevaltrivedi/.ssh/id_rsa.pub")
-
+    public_key = file("/Users/kevaltrivedi/.ssh/id_rsa.pub")
   }
 
   custom_data = data.cloudinit_config.init.rendered

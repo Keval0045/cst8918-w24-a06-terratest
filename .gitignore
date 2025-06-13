@@ -28,4 +28,9 @@
 *.tfstate.*
 .vscode
 .idea
-.idea
+.idea.terraform/
+*.tfstate
+*.tfstate.backup
+.terraform.lock.hcl
+*_auto.tfvars
+terraform.tfvars
